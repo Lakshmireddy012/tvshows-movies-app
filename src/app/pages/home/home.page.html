@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="movies && segment == 'popular'">Popular Movies</ion-title>
+    <ion-title *ngIf="movies && segment == 'top'">Top Movies</ion-title>
+    <ion-title *ngIf="movies && segment == 'upcoming'">Upcoming Movies</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onSearch()">
+        <ion-icon name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- <h1 *ngIf="movies && segment == 'popular'">Popular</h1>
+  <h1 *ngIf="movies && segment == 'top'">Top</h1>
+  <h1 *ngIf="movies && segment == 'upcoming'">Upcoming</h1> -->
+
+  <div class="movies-flex" *ngIf="movies">
+    <div class="movie" *ngFor="let movie of movies" (click)="onMovieDetail(movie.id)">
+      <div class="poster">
+        <img *ngIf="movie.poster_path" class="poster" [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path">
+        <img *ngIf="movie.poster_path" class="poster-effect" [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path">
+      </div>
+      <div class="title">{{ movie.title }}</div>
+      <div class="year">{{ movie.release_date | date:'yyyy' }}</div>
+      <div class="vote"><ion-icon name="star"></ion-icon><b>{{ movie.vote_average }}</b>/10</div>
+    </div>
+  </div>
+  
+  <div class="content-fullscreen-message" *ngIf="movies && movies.length == 0">
+    An error has occurred, No movies found
+  </div>
+
+  <!-- <ion-button *ngIf="movies && movies.length > 0 && page < 5" expand="full" size="large" fill="clear" (click)="onNextPage()">Ver más</ion-button> -->
+  <ion-infinite-scroll *ngIf="movies && movies.length > 0 && page < 5" threshold="100px" (ionInfinite)="onNextPage($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="tabs">
+      <div class="tab" [ngClass]="{ 'active' : segment == 'popular' }" (click)="onTabSelected('popular')">
+        <ion-icon name="flame"></ion-icon>
+        <div class="label">Popular</div>
+      </div>
+      <div class="tab" [ngClass]="{ 'active' : segment == 'top' }" (click)="onTabSelected('top')">
+        <ion-icon name="star"></ion-icon>
+        <div class="label">Top</div>
+      </div>
+      <div class="tab" [ngClass]="{ 'active' : segment == 'upcoming' }" (click)="onTabSelected('upcoming')">
+        <ion-icon name="calendar"></ion-icon>
+        <div class="label">Upcoming</div>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-footer>
