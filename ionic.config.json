@@ -1,5 +1,7 @@
 {
   "name": "tvshows-movies-app",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
